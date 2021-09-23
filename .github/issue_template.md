@@ -1,4 +1,5 @@
 ---
+name: issue
 labels: needs triage
 ---
 
@@ -10,10 +11,12 @@ When <Something Happens>
 Then <This other thing should happen?
 ```
 
-Examples:
+
+### Example
 
 <Code snippets that illustrate the when/then blocks>
 
-## Notes
+
+## Additional Context
 
 <Additional notes>
