@@ -1,8 +1,0 @@
-backoffLimit: 1
-test: |-
-  echo "hello"
-  echo "world"
-something:
-  that:
-    is:
-      nested: 'hello!'
