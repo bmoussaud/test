@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: acceptance
+  labels:
+    apps.tanzu.vmware.com/task: test
+spec:
+  params:
+    - name: url
+  steps:
+    - name: test
+      image: busybox
+      command:
+        - sh
+        - -cxe
+        - |-
+          until wget -O- $(params.url); do
+            test $i -eq 10 && {
+              echo "10 attempts - all failed."
+              echo "aborting."
+              exit 1
+            }
+
+            echo "attempt $i failed."
+            sleep 1
+          done

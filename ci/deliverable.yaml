@@ -1,0 +1,11 @@
+apiVersion: carto.run/v1alpha1
+kind: Deliverable
+metadata:
+  name: test
+  labels:
+    apps.tanzu.vmware.com/deliverable-type: web
+spec:
+  source:
+    subPath: ./dist
+    git:
+      url: https://github.com/cirocosta/test

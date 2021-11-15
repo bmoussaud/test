@@ -1,0 +1,82 @@
+---
+apiVersion: carto.run/v1alpha1
+kind: ClusterSourceTemplate
+metadata:
+  name: source-provider
+spec:
+  urlPath: .status.artifact.url
+  revisionPath: .status.artifact.revision
+
+  template:
+    apiVersion: source.toolkit.fluxcd.io/v1beta1
+    kind: GitRepository
+    metadata:
+      name: $(deliverable.metadata.name)$
+    spec:
+      interval: 1m0s
+      url: $(deliverable.spec.source.git.url)$
+
+
+---
+apiVersion: carto.run/v1alpha1
+kind: ClusterDeploymentTemplate
+metadata:
+  name: deployer
+spec:
+  params:
+    - name: subPath
+      default: "."
+
+  observedCompletion:
+    succeeded:
+      key: '.status.conditions[?(@.type=="ReconcileSucceeded")].status'
+      value: 'True'
+    failed:
+      key: '.status.conditions[?(@.type=="ReconcileSucceeded")].status'
+      value: 'False'
+  template:
+    apiVersion: kappctrl.k14s.io/v1alpha1
+    kind: App
+    metadata:
+      name: $(deliverable.metadata.name)$
+    spec:
+      serviceAccountName: default
+      fetch:
+        - http:
+            url: $(source.url)$
+      template:
+        - ytt:
+            paths:
+              - $(params.subPath)$
+        - kbld: {}
+      deploy:
+        - kapp: {}
+
+
+---
+apiVersion: carto.run/v1alpha1
+kind: ClusterTemplate
+metadata:
+  name: tester
+spec:
+  template:
+    apiVersion: carto.run/v1alpha1
+    kind: Runnable
+    metadata:
+      name: $(deliverable.metadata.name)$
+    spec:
+      runTemplateRef:
+        name: tekton-taskrun
+
+      selector:
+        resource:
+          apiVersion: tekton.dev/v1beta1
+          kind: Task
+        matchingLabels:
+          apps.tanzu.vmware.com/task: test
+
+      inputs:
+        serviceAccountName: default
+        params:
+        - name: url
+          value: $(deliverable.metadata.name)$

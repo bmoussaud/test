@@ -1,0 +1,33 @@
+---
+apiVersion: carto.run/v1alpha1
+kind: ClusterDelivery
+metadata:
+  name: delivery
+spec:
+  selector:
+    apps.tanzu.vmware.com/deliverable-type: web
+
+  resources:
+    - name: source-provider
+      templateRef:
+        kind: ClusterSourceTemplate
+        name: source-provider
+
+    - name: deployer
+      templateRef:
+        kind: ClusterDeploymentTemplate
+        name: deployer
+      params:
+        - name: subPath
+          value: $(deliverable.spec.source.subPath)$
+      sources:
+        - resource: source-provider
+          name: source
+
+    - name: tester
+      templateRef:
+        kind: ClusterTemplate
+        name: tester
+      sources:
+        - resource: deployer
+          name: source

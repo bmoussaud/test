@@ -1,0 +1,15 @@
+apiVersion: carto.run/v1alpha1
+kind: ClusterRunTemplate
+metadata:
+  name: tekton-taskrun
+spec:
+  template:
+    apiVersion: tekton.dev/v1beta1
+    kind: TaskRun
+    metadata:
+      generateName: $(runnable.metadata.name)$-
+    spec:
+      serviceAccountName: $(runnable.spec.inputs.serviceAccountName)$
+      taskRef:
+        name: $(selected.metadata.name)$
+      params: $(runnable.spec.inputs.params)$
