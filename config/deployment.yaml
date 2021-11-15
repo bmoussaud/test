@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: test
+      app.kubernetes.io/part-of: test
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: test
+        app.kubernetes.io/part-of: test
+    spec:
+      enableServiceLinks: false
+      automountServiceAccountToken: false
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        capabilities:
+          drop:
+            - all
+      containers:
+        - name: server
+          image: ko://github.com/cirocosta/test
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 20Mi
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test
+spec:
+  selector:
+    app.kubernetes.io/name: test
+    app.kubernetes.io/part-of: test
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
