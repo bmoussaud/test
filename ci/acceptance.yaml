@@ -7,6 +7,7 @@ metadata:
 spec:
   params:
     - name: url
+    - name: source-revision
   steps:
     - name: test
       image: busybox
@@ -14,6 +15,8 @@ spec:
         - sh
         - -cxe
         - |-
+          echo "testing deployment of $(params.source-revision)"
+
           until wget -O- $(params.url); do
             test $i -eq 10 && {
               echo "10 attempts - all failed."

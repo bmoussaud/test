@@ -20,9 +20,8 @@ spec:
       params:
         - name: subPath
           value: $(deliverable.spec.source.subPath)$
-      sources:
-        - resource: source-provider
-          name: source
+      deployment:
+        resource: source-provider
 
     - name: tester
       templateRef:
@@ -30,4 +29,4 @@ spec:
         name: tester
       sources:
         - resource: deployer
-          name: source
+          name: deployment

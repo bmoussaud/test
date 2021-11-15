@@ -34,6 +34,7 @@ spec:
     failed:
       key: '.status.conditions[?(@.type=="ReconcileSucceeded")].status'
       value: 'False'
+
   template:
     apiVersion: kappctrl.k14s.io/v1alpha1
     kind: App
@@ -43,7 +44,7 @@ spec:
       serviceAccountName: default
       fetch:
         - http:
-            url: $(source.url)$
+            url: $(deployment.url)$
       template:
         - ytt:
             paths:
@@ -78,5 +79,7 @@ spec:
       inputs:
         serviceAccountName: default
         params:
-        - name: url
-          value: $(deliverable.metadata.name)$
+          - name: url
+            value: $(deliverable.metadata.name)$
+          - name: source-revision
+            value: $(source.revision)$
