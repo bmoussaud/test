@@ -25,7 +25,7 @@ spec:
             - all
       containers:
         - name: server
-          image: ghcr.io/cirocosta/test@sha256:671229b0b3eb50502dfb8b6a0ccedd95dce82f96d055350a9f0884f5b35c3ccc
+          image: ghcr.io/bmoussaud/test@sha256:1453fe631cf30adf03711c091db85ece42038dfe576d495c5dab57b98b63004a
           resources:
             limits:
               cpu: 100m

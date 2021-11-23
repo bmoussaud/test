@@ -1,3 +1,3 @@
-module github.com/cirocosta/test
+module github.com/bmoussaud/test
 
 go 1.17

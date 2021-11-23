@@ -26,7 +26,7 @@ spec:
             - all
       containers:
         - name: server
-          image: ko://github.com/cirocosta/test
+          image: ko://github.com/bmoussaud/test
           resources:
             limits:
               cpu: 100m
