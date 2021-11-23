@@ -8,4 +8,4 @@ spec:
   source:
     subPath: ./dist
     git:
-      url: https://github.com/cirocosta/test
+      url: https://github.com/bmoussaud/test
